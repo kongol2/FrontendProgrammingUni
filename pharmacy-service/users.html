@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>users</title>
+  <meta name="description" content="users management page">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- header -->
+  <header class="header">
+    <h1 class="header__title">users management</h1>
+  </header>
+
+  <!-- navigation -->
+  <nav class="nav">
+    <ul class="nav__list">
+      <li><a href="users.html">users</a></li>
+      <li><a href="pharmacy.html">pharmacy</a></li>
+      <li><a href="index.html">logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- main content -->
+  <main class="layout__content">
+    <section class="container">
+
+      <!-- users grid -->
+      <div class="grid">
+        <article class="users__item">
+          <p>username: admin</p>
+          <p>role: admin</p>
+          <a href="user-details.html">details</a>
+        </article>
+
+        <article class="users__item">
+          <p>username: user1</p>
+          <p>role: regular</p>
+          <a href="user-details.html">details</a>
+        </article>
+      </div>
+
+      <!-- create user form -->
+      <section>
+        <h2>create user</h2>
+        <form>
+          <input type="text" placeholder="username" required>
+          <input type="password" placeholder="password" required>
+          <input type="password" placeholder="confirm password" required>
+          <select required>
+            <option>admin</option>
+            <option>regular</option>
+          </select>
+
+          <button class="button button--primary" type="submit">ok</button>
+          <button class="button" type="button">cancel</button>
+        </form>
+      </section>
+
+    </section>
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <p>© 2026 pharmacy service</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

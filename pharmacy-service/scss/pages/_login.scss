@@ -1,0 +1,11 @@
+.login {
+  min-height: 80vh;
+  @include flex-center;
+}
+
+.login__form {
+  background-color: #fff;
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+}

@@ -1,0 +1,14 @@
+.notification {
+  padding: 10px;
+  margin-top: 12px;
+}
+
+.notification--error {
+  background-color: $color-danger;
+  color: #fff;
+}
+
+.notification--success {
+  background-color: $color-success;
+  color: #fff;
+}

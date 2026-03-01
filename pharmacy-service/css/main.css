@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  color: #333;
+  background-color: #f9fafb;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+}
+
+.header {
+  background-color: #2b7cff;
+  padding: 16px;
+}
+
+.header__title {
+  color: #fff;
+  text-align: center;
+}
+
+.nav {
+  background-color: #e6f0ff;
+  padding: 12px;
+}
+
+.nav__list {
+  display: flex;
+  gap: 16px;
+  list-style: none;
+}
+
+.footer {
+  padding: 12px;
+  text-align: center;
+  background-color: #e6f0ff;
+}
+
+.button {
+  transition: all 0.3s ease;
+  padding: 10px 16px;
+  border: none;
+  cursor: pointer;
+  font-family: "Arial", sans-serif;
+}
+.button--primary {
+  background-color: #2b7cff;
+  color: #fff;
+}
+.button--danger {
+  background-color: #e74c3c;
+  color: #fff;
+}
+.button:hover {
+  opacity: 0.9;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input {
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.notification {
+  padding: 10px;
+  margin-top: 12px;
+}
+
+.notification--error {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.notification--success {
+  background-color: #27ae60;
+  color: #fff;
+}
+
+.login {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login__form {
+  background-color: #fff;
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.users {
+  padding: 24px;
+}
+
+.users__item {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.pharmacy {
+  padding: 24px;
+}
+
+.pharmacy__item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+/*# sourceMappingURL=main.css.map */

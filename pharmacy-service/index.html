@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>pharmacy service | login</title>
+  <meta name="description" content="pharmacy service login page">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- application header -->
+  <header class="header">
+    <h1 class="header__title">pharmacy service</h1>
+  </header>
+
+  <!-- main content -->
+  <main class="layout__content login">
+    <section class="container">
+
+      <!-- login section -->
+      <section class="login__form">
+        <h2>login</h2>
+
+        <!-- login form -->
+        <form>
+          <!-- username -->
+          <label>
+            username
+            <input type="text" placeholder="enter username" required>
+          </label>
+
+          <!-- password -->
+          <label>
+            password
+            <input type="password" placeholder="enter password" required>
+          </label>
+
+          <!-- submit -->
+          <button class="button button--primary" type="submit">
+            sign in
+          </button>
+        </form>
+
+        <!-- validation error -->
+        <div class="notification notification--error">
+          invalid username or password
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <!-- footer -->
+  <footer class="footer">
+    <p>© 2026 pharmacy service</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+.button {
+  @include transition(all);
+  padding: 10px 16px;
+  border: none;
+  cursor: pointer;
+  font-family: $font-main;
+
+  &--primary {
+    background-color: $color-primary;
+    color: #fff;
+  }
+
+  &--danger {
+    background-color: $color-danger;
+    color: #fff;
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
+}

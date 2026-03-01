@@ -1,0 +1,10 @@
+.nav {
+  background-color: $color-secondary;
+  padding: 12px;
+}
+
+.nav__list {
+  display: flex;
+  gap: 16px;
+  list-style: none;
+}
