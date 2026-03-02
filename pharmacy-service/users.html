@@ -3,72 +3,63 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>users</title>
-  <meta name="description" content="users management page">
+  <title>Pharmacy Service | Users</title>
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
 <div class="layout">
-
-  <!-- header -->
   <header class="header">
-    <h1 class="header__title">users management</h1>
+    <div class="container header__container">
+      <div class="header__brand">pharmacy service</div>
+      <nav class="nav">
+        <ul class="nav__list">
+          <li class="nav__item"><a href="users.html" class="nav__link nav__link--active">users</a></li>
+          <li class="nav__item"><a href="pharmacy.html" class="nav__link">pharmacy</a></li>
+          <li class="nav__item nav__item--push"><a href="index.html" class="nav__link nav__link--logout">log out</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <!-- navigation -->
-  <nav class="nav">
-    <ul class="nav__list">
-      <li><a href="users.html">users</a></li>
-      <li><a href="pharmacy.html">pharmacy</a></li>
-      <li><a href="index.html">logout</a></li>
-    </ul>
-  </nav>
-
-  <!-- main content -->
-  <main class="layout__content">
-    <section class="container">
-
-      <!-- users grid -->
-      <div class="grid">
-        <article class="users__item">
-          <p>username: admin</p>
-          <p>role: admin</p>
-          <a href="user-details.html">details</a>
-        </article>
-
-        <article class="users__item">
-          <p>username: user1</p>
-          <p>role: regular</p>
-          <a href="user-details.html">details</a>
-        </article>
-      </div>
-
-      <!-- create user form -->
-      <section>
-        <h2>create user</h2>
-        <form>
-          <input type="text" placeholder="username" required>
-          <input type="password" placeholder="password" required>
-          <input type="password" placeholder="confirm password" required>
-          <select required>
-            <option>admin</option>
-            <option>regular</option>
-          </select>
-
-          <button class="button button--primary" type="submit">ok</button>
-          <button class="button" type="button">cancel</button>
-        </form>
-      </section>
-
+  <main class="container content-area">
+    <section class="section-header">
+      <h2 class="section-header__title">Users Management</h2>
+      <button class="button button--success">Create New User</button>
     </section>
+
+    <div class="users-grid">
+      <article class="user-card">
+        <div class="user-card__info">
+          <h3 class="user-card__name">Admin</h3>
+          <span class="badge badge--admin">admin</span>
+        </div>
+        <div class="user-card__actions">
+          <a href="user-details.html" class="button button--small">Details</a>
+          <a href="user-edit.html" class="button button--small">Edit</a>
+          <a href="#" class="button button--small button--danger">Delete</a>
+        </div>
+      </article>
+
+      <article class="user-card">
+        <div class="user-card__info">
+          <h3 class="user-card__name">User1</h3>
+          <span class="badge">regular</span>
+        </div>
+        <div class="user-card__actions">
+          <a href="user-details.html" class="button button--small">Details</a>
+          <a href="user-edit.html" class="button button--small">Edit</a>
+          <a href="#" class="button button--small button--danger">Delete</a>
+        </div>
+      </article>
+    </div>
   </main>
 
-  <!-- footer -->
   <footer class="footer">
-    <p>© 2026 pharmacy service</p>
+    <div class="container">
+      <p>© 2026 pharmacy service • clean & secure</p>
+    </div>
   </footer>
-
 </div>
 
 </body>

@@ -3,61 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>pharmacy service | login</title>
-  <meta name="description" content="pharmacy service login page">
+  <title>Pharmacy Service | Login</title>
   <link rel="stylesheet" href="css/main.css">
 </head>
-<body>
+<body class="page-login">
 
-<div class="layout">
+<div class="layout layout--centered">
+  <main class="login-card">
+    <header class="login-card__header">
+      <h1 class="login-card__title">pharmacy service</h1>
+      <p class="login-card__subtitle">please enter your details</p>
+    </header>
 
-  <!-- application header -->
-  <header class="header">
-    <h1 class="header__title">pharmacy service</h1>
-  </header>
+    <div class="login-card__form">
+      <div class="form-group">
+        <label class="form-group__label" for="user">username</label>
+        <input class="form-group__input" type="text" id="user" placeholder="enter username">
+      </div>
 
-  <!-- main content -->
-  <main class="layout__content login">
-    <section class="container">
+      <div class="form-group">
+        <label class="form-group__label" for="pass">password</label>
+        <input class="form-group__input" type="password" id="pass" placeholder="enter password">
+      </div>
 
-      <!-- login section -->
-      <section class="login__form">
-        <h2>login</h2>
-
-        <!-- login form -->
-        <form>
-          <!-- username -->
-          <label>
-            username
-            <input type="text" placeholder="enter username" required>
-          </label>
-
-          <!-- password -->
-          <label>
-            password
-            <input type="password" placeholder="enter password" required>
-          </label>
-
-          <!-- submit -->
-          <button class="button button--primary" type="submit">
-            sign in
-          </button>
-        </form>
-
-        <!-- validation error -->
-        <div class="notification notification--error">
-          invalid username or password
-        </div>
-      </section>
-
-    </section>
+      <a href="users.html" class="button button--primary button--block">sign in</a>
+      
+      <div class="notification notification--error">
+        invalid username or password
+      </div>
+    </div>
   </main>
-
-  <!-- footer -->
-  <footer class="footer">
-    <p>© 2026 pharmacy service</p>
-  </footer>
-
 </div>
 
 </body>

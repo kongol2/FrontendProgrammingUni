@@ -1,10 +1,46 @@
 .nav {
-  background-color: $color-secondary;
-  padding: 12px;
-}
+  flex-grow: 1;
 
-.nav__list {
-  display: flex;
-  gap: 16px;
-  list-style: none;
+  &__list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__item {
+    &--push {
+      margin-left: auto; // Це виштовхує Log Out вправо
+    }
+  }
+
+  &__link {
+    display: block;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    color: $color-text;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: $color-primary;
+    }
+
+    &--active {
+      font-weight: bold;
+      border-bottom: 2px solid $color-primary;
+    }
+
+    &--logout {
+      color: $color-danger;
+      border: 1px solid $color-danger;
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+
+      &:hover {
+        background-color: $color-danger;
+        color: white;
+      }
+    }
+  }
 }
