@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+    <title id="title">Pharmacy shelves and service desk</title>
+    <desc id="desc">A clean pharmacy interior with medicine shelves and a counter.</desc>
+    <rect width="1200" height="520" fill="#dbeee7"/>
+    <rect y="320" width="1200" height="200" fill="#c9ddd8"/>
+    <rect x="64" y="78" width="468" height="284" rx="8" fill="#ffffff"/>
+    <rect x="96" y="116" width="404" height="18" fill="#93b9ad"/>
+    <rect x="96" y="188" width="404" height="18" fill="#93b9ad"/>
+    <rect x="96" y="260" width="404" height="18" fill="#93b9ad"/>
+    <rect x="118" y="136" width="54" height="52" rx="5" fill="#007a5a"/>
+    <rect x="190" y="136" width="54" height="52" rx="5" fill="#f2bf5e"/>
+    <rect x="262" y="136" width="54" height="52" rx="5" fill="#6e9ed6"/>
+    <rect x="334" y="136" width="54" height="52" rx="5" fill="#e67676"/>
+    <rect x="118" y="208" width="54" height="52" rx="5" fill="#6e9ed6"/>
+    <rect x="190" y="208" width="54" height="52" rx="5" fill="#007a5a"/>
+    <rect x="262" y="208" width="54" height="52" rx="5" fill="#f2bf5e"/>
+    <rect x="334" y="208" width="54" height="52" rx="5" fill="#9d82c4"/>
+    <rect x="648" y="104" width="324" height="238" rx="10" fill="#ffffff"/>
+    <rect x="696" y="152" width="228" height="142" rx="8" fill="#e4f4ed"/>
+    <rect x="792" y="178" width="36" height="90" fill="#007a5a"/>
+    <rect x="765" y="205" width="90" height="36" fill="#007a5a"/>
+    <rect x="588" y="330" width="480" height="92" rx="10" fill="#172026"/>
+    <rect x="640" y="358" width="136" height="22" rx="4" fill="#d9f2e7"/>
+    <rect x="820" y="358" width="178" height="22" rx="4" fill="#9fd8c1"/>
+</svg>

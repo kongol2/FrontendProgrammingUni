@@ -1,0 +1,26 @@
+{
+    "name": "pharmacy-service-spa",
+    "version": "1.0.0",
+    "description": "Lab 2 SPA with pure JavaScript, REST API, JSON exchange, and ESLint.",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "lint": "eslint **/*.js --ignore-pattern node_modules/"
+    },
+    "keywords": [
+        "spa",
+        "rest",
+        "pharmacy",
+        "ajax"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "ws": "^8.13.0"
+    },
+    "devDependencies": {
+        "eslint": "^6.8.0",
+        "eslint-config-airbnb-base": "^14.0.0",
+        "eslint-plugin-import": "^2.20.1"
+    }
+}

@@ -1,0 +1,170 @@
+{
+    "medicines": [
+        {
+            "id": 1,
+            "name": "Paracetamol",
+            "category": "Pain relief",
+            "dosage": "500 mg tablets",
+            "price": 50,
+            "currency": "UAH",
+            "stock": 84,
+            "requiresPrescription": false,
+            "manufacturer": "Farmak",
+            "location": "Aisle 2, shelf A",
+            "expiryDate": "2027-04-14"
+        },
+        {
+            "id": 2,
+            "name": "Ibuprofen",
+            "category": "Anti-inflammatory",
+            "dosage": "200 mg tablets",
+            "price": 80,
+            "currency": "UAH",
+            "stock": 0,
+            "requiresPrescription": false,
+            "manufacturer": "Darnitsa",
+            "location": "Aisle 2, shelf B",
+            "expiryDate": "2027-01-09"
+        },
+        {
+            "id": 3,
+            "name": "Amoxicillin",
+            "category": "Antibiotic",
+            "dosage": "500 mg capsules",
+            "price": 210,
+            "currency": "UAH",
+            "stock": 27,
+            "requiresPrescription": true,
+            "manufacturer": "Arterium",
+            "location": "Prescription cabinet",
+            "expiryDate": "2026-12-20"
+        },
+        {
+            "id": 4,
+            "name": "Loratadine",
+            "category": "Allergy",
+            "dosage": "10 mg tablets",
+            "price": 96,
+            "currency": "UAH",
+            "stock": 53,
+            "requiresPrescription": false,
+            "manufacturer": "Kyiv Vitamin Plant",
+            "location": "Aisle 4, shelf C",
+            "expiryDate": "2028-02-01"
+        },
+        {
+            "id": 5,
+            "name": "Omeprazole",
+            "category": "Digestive health",
+            "dosage": "20 mg capsules",
+            "price": 130,
+            "currency": "UAH",
+            "stock": 18,
+            "requiresPrescription": false,
+            "manufacturer": "Teva",
+            "location": "Aisle 5, shelf D",
+            "expiryDate": "2027-07-11"
+        },
+        {
+            "id": 6,
+            "name": "Metformin",
+            "category": "Diabetes care",
+            "dosage": "850 mg tablets",
+            "price": 165,
+            "currency": "UAH",
+            "stock": 7,
+            "requiresPrescription": true,
+            "manufacturer": "Sandoz",
+            "location": "Prescription cabinet",
+            "expiryDate": "2027-10-03"
+        }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "name": "Olena Marchenko",
+            "role": "Admin",
+            "department": "Inventory",
+            "shift": "08:00-16:00",
+            "email": "olena.marchenko@pharmacy.local",
+            "completedOrders": 134
+        },
+        {
+            "id": 2,
+            "name": "Ivan Petrenko",
+            "role": "Pharmacist",
+            "department": "Prescription desk",
+            "shift": "10:00-18:00",
+            "email": "ivan.petrenko@pharmacy.local",
+            "completedOrders": 92
+        },
+        {
+            "id": 3,
+            "name": "Sofia Kovalenko",
+            "role": "Pharmacist",
+            "department": "Consultations",
+            "shift": "12:00-20:00",
+            "email": "sofia.kovalenko@pharmacy.local",
+            "completedOrders": 78
+        },
+        {
+            "id": 4,
+            "name": "Maksym Shevchenko",
+            "role": "Assistant",
+            "department": "Front desk",
+            "shift": "09:00-17:00",
+            "email": "maksym.shevchenko@pharmacy.local",
+            "completedOrders": 65
+        }
+    ],
+    "demands": [
+        {
+            "id": 1,
+            "medicineName": "Ibuprofen",
+            "requestedBy": "Cardiology department",
+            "quantity": 40,
+            "priority": "High",
+            "status": "Supplier contacted",
+            "createdAt": "2026-05-02"
+        },
+        {
+            "id": 2,
+            "medicineName": "Insulin glargine",
+            "requestedBy": "Endocrinology desk",
+            "quantity": 18,
+            "priority": "Urgent",
+            "status": "Awaiting delivery",
+            "createdAt": "2026-05-05"
+        },
+        {
+            "id": 3,
+            "medicineName": "Vitamin D3",
+            "requestedBy": "Front desk",
+            "quantity": 60,
+            "priority": "Medium",
+            "status": "Queued",
+            "createdAt": "2026-05-07"
+        },
+        {
+            "id": 4,
+            "medicineName": "Paracetamol",
+            "requestedBy": "SPA dashboard",
+            "quantity": 10,
+            "priority": "Medium",
+            "status": "Queued",
+            "createdAt": "2026-05-10"
+        }
+    ],
+    "announcements": [
+        {
+            "id": 1,
+            "title": "Cold chain audit",
+            "message": "Refrigerated stock was checked this morning and all sensors are within expected range."
+        },
+        {
+            "id": 2,
+            "title": "Prescription review",
+            "message": "Antibiotic orders must be double checked by the pharmacist on shift before release."
+        }
+    ]
+}
