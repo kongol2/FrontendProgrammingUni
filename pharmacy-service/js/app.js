@@ -5,6 +5,10 @@ const api = {
     demands: '/api/demands',
 };
 
+const staticDataPath = 'data/pharmacy-data.json';
+let useApiEndpoints = true;
+let wsClient = null;
+
 const state = {
     activeView: 'overview',
     search: '',
@@ -44,6 +48,61 @@ const requestJson = async (url, options = {}) => {
     }
 
     return response.json();
+};
+
+const getStoredDemands = () => {
+    try {
+        const data = window.localStorage.getItem('pharmacy-static-demands');
+        return data ? JSON.parse(data) : [];
+    } catch (error) {
+        return [];
+    }
+};
+
+const saveStoredDemands = (demands) => {
+    try {
+        window.localStorage.setItem('pharmacy-static-demands', JSON.stringify(demands));
+    } catch (error) {
+        // Ignore storage failures
+    }
+};
+
+const addStoredDemand = (demand) => {
+    const storedDemands = getStoredDemands();
+    saveStoredDemands([...storedDemands, demand]);
+};
+
+const buildSummary = (store) => {
+    const totalStock = store.medicines.reduce((sum, medicine) => sum + medicine.stock, 0);
+    const lowStock = store.medicines.filter((medicine) => medicine.stock > 0 && medicine.stock < 10);
+    const unavailable = store.medicines.filter((medicine) => medicine.stock === 0);
+    const urgentDemands = store.demands.filter((demand) => demand.priority === 'Urgent');
+
+    return {
+        totalMedicines: store.medicines.length,
+        totalStock,
+        lowStockCount: lowStock.length,
+        unavailableCount: unavailable.length,
+        activeUsers: store.users.length,
+        activeDemands: store.demands.length,
+        urgentDemands: urgentDemands.length,
+        announcements: store.announcements,
+    };
+};
+
+const loadStaticStore = async () => {
+    const response = await fetch(staticDataPath, {
+        cache: 'no-store',
+    });
+
+    if (!response.ok) {
+        throw new Error('Static data failed to load');
+    }
+
+    const store = await response.json();
+    const storedDemands = getStoredDemands();
+    store.demands = [...store.demands, ...storedDemands];
+    return store;
 };
 
 const card = (title, value, note) => `
@@ -184,7 +243,58 @@ const render = () => {
     renderers[state.activeView]();
 };
 
-const loadData = async () => {
+let loadData;
+
+function initWebSocket() {
+    if (wsClient) {
+        return;
+    }
+
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    wsClient = new WebSocket(`${protocol}//${window.location.host}`);
+
+    wsClient.addEventListener('open', () => {
+        setStatus('Connected', 'active');
+    });
+
+    wsClient.addEventListener('message', (event) => {
+        const notification = JSON.parse(event.data);
+
+        if (notification.type === 'connected') {
+            // Notification service connected
+        } else if (notification.type === 'new-demand') {
+            state.demands = notification.data.demands || state.demands;
+            state.summary = notification.summary;
+
+            setStatus(`New demand: ${notification.data.data.medicineName}`, 'active');
+            renderMetrics();
+
+            if (state.activeView === 'demands') {
+                loadData();
+            }
+
+            setTimeout(() => {
+                setStatus('Connected', 'active');
+            }, 3000);
+        }
+    });
+
+    wsClient.addEventListener('close', () => {
+        setStatus('Disconnected', 'inactive');
+        wsClient = null;
+        setTimeout(() => {
+            if (useApiEndpoints) {
+                initWebSocket();
+            }
+        }, 3000);
+    });
+
+    wsClient.addEventListener('error', () => {
+        setStatus('Connection error', 'error');
+    });
+}
+
+loadData = async () => {
     setStatus('Loading', 'loading');
     content.innerHTML = '<p class="empty">Loading data...</p>';
 
@@ -200,28 +310,67 @@ const loadData = async () => {
         state.medicines = medicines;
         state.users = users;
         state.demands = demands;
+        useApiEndpoints = true;
         setStatus('Online', 'online');
-        render();
+
+        if (!wsClient) {
+            initWebSocket();
+        }
     } catch (error) {
-        setStatus('Offline', 'offline');
-        content.innerHTML = `<p class="empty">Unable to load data from the API. ${error.message}</p>`;
+        try {
+            const store = await loadStaticStore();
+            state.summary = buildSummary(store);
+            state.medicines = store.medicines;
+            state.users = store.users;
+            state.demands = store.demands;
+            useApiEndpoints = false;
+            setStatus('Static preview', 'offline');
+        } catch (staticError) {
+            setStatus('Offline', 'offline');
+            content.innerHTML = `<p class="empty">Unable to load data. ${staticError.message}</p>`;
+            return;
+        }
     }
+
+    render();
 };
 
 const createDemand = async (medicineName) => {
     setStatus('Saving', 'loading');
 
     try {
-        await requestJson(api.demands, {
-            method: 'POST',
-            body: JSON.stringify({
+        if (useApiEndpoints) {
+            await requestJson(api.demands, {
+                method: 'POST',
+                body: JSON.stringify({
+                    medicineName,
+                    quantity: 10,
+                    requestedBy: 'SPA dashboard',
+                    priority: 'Medium',
+                }),
+            });
+            await loadData();
+        } else {
+            const nextId = state.demands.reduce((max, item) => Math.max(max, item.id), 0) + 1;
+            const demand = {
+                id: nextId,
                 medicineName,
-                quantity: 10,
                 requestedBy: 'SPA dashboard',
+                quantity: 10,
                 priority: 'Medium',
-            }),
-        });
-        await loadData();
+                status: 'Queued',
+                createdAt: new Date().toISOString().slice(0, 10),
+            };
+            state.demands.push(demand);
+            addStoredDemand(demand);
+            state.summary = buildSummary({
+                medicines: state.medicines,
+                users: state.users,
+                demands: state.demands,
+                announcements: state.summary?.announcements || [],
+            });
+        }
+
         state.activeView = 'demands';
         tabs.forEach((tab) => {
             tab.classList.toggle('tabs__button--active', tab.dataset.view === state.activeView);
@@ -271,51 +420,4 @@ content.addEventListener('click', (event) => {
 
 refreshButton.addEventListener('click', loadData);
 
-// WebSocket connection for real-time notifications
-const initWebSocket = () => {
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const ws = new WebSocket(`${protocol}//${window.location.host}`);
-
-    ws.addEventListener('open', () => {
-        setStatus('Connected', 'active');
-    });
-
-    ws.addEventListener('message', (event) => {
-        const notification = JSON.parse(event.data);
-
-        if (notification.type === 'connected') {
-            // Notification service connected
-        } else if (notification.type === 'new-demand') {
-            // Update state with new notification
-            state.demands = notification.data.demands || state.demands;
-            state.summary = notification.summary;
-
-            // Show visual feedback
-            setStatus(`New demand: ${notification.data.data.medicineName}`, 'active');
-            renderMetrics();
-
-            // Auto-refresh demands view if active
-            if (state.activeView === 'demands') {
-                loadData();
-            }
-
-            // Reset status after 3 seconds
-            setTimeout(() => {
-                setStatus('Connected', 'active');
-            }, 3000);
-        }
-    });
-
-    ws.addEventListener('close', () => {
-        setStatus('Disconnected', 'inactive');
-        // Attempt to reconnect after 3 seconds
-        setTimeout(initWebSocket, 3000);
-    });
-
-    ws.addEventListener('error', () => {
-        setStatus('Connection error', 'error');
-    });
-};
-
 loadData();
-initWebSocket();

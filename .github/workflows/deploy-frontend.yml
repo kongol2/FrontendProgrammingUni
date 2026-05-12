@@ -26,6 +26,7 @@ jobs:
           cp -R pharmacy-service/css frontend-dist/
           cp -R pharmacy-service/js frontend-dist/
           cp -R pharmacy-service/assets frontend-dist/ || true
+          cp -R pharmacy-service/data frontend-dist/ || true
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v6
