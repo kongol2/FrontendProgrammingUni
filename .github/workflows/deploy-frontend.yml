@@ -38,6 +38,8 @@ jobs:
   deploy-pages:
     needs: deploy-frontend
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
     permissions:
       pages: write
       id-token: write
