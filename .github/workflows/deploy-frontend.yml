@@ -1,0 +1,47 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare frontend artifact
+        run: |
+          rm -rf frontend-dist
+          mkdir -p frontend-dist
+          cp pharmacy-service/index.html frontend-dist/
+          cp pharmacy-service/*.html frontend-dist/ || true
+          cp -R pharmacy-service/css frontend-dist/
+          cp -R pharmacy-service/js frontend-dist/
+          cp -R pharmacy-service/assets frontend-dist/ || true
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: frontend-dist
+
+  deploy-pages:
+    needs: deploy-frontend
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
