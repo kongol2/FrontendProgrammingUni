@@ -21,16 +21,34 @@ const state = {
 const content = document.querySelector('#content');
 const metrics = document.querySelector('#metrics');
 const statusLabel = document.querySelector('#service-status');
+const notificationBox = document.querySelector('#notification');
 const activeKicker = document.querySelector('#active-kicker');
 const activeTitle = document.querySelector('#active-title');
 const searchInput = document.querySelector('#search-input');
 const searchForm = document.querySelector('#search-form');
 const refreshButton = document.querySelector('#refresh-button');
+const testWebSocketButton = document.querySelector('#test-websocket-button');
+const addUserButton = document.querySelector('#add-user-button');
+const addUserModal = document.querySelector('#add-user-modal');
+const addUserForm = document.querySelector('#add-user-form');
 const tabs = Array.from(document.querySelectorAll('[data-view]'));
+const closeModalButtons = Array.from(document.querySelectorAll('[data-close-modal]'));
 
 const setStatus = (text, modifier) => {
     statusLabel.textContent = text;
     statusLabel.className = `service-status service-status--${modifier}`;
+};
+
+let notificationTimer = null;
+
+const showNotification = (message, modifier = 'success') => {
+    notificationBox.textContent = message;
+    notificationBox.className = `notification notification--${modifier}`;
+
+    clearTimeout(notificationTimer);
+    notificationTimer = setTimeout(() => {
+        notificationBox.className = 'notification notification--hidden';
+    }, 5000);
 };
 
 const formatMoney = (value, currency) => `${value} ${currency}`;
@@ -263,19 +281,42 @@ function initWebSocket() {
         if (notification.type === 'connected') {
             // Notification service connected
         } else if (notification.type === 'new-demand') {
-            state.demands = notification.data.demands || state.demands;
+            state.demands.push(notification.data);
             state.summary = notification.summary;
 
-            setStatus(`New demand: ${notification.data.data.medicineName}`, 'active');
+            setStatus(`New demand: ${notification.data.medicineName}`, 'active');
+            showNotification(`New demand request: ${notification.data.medicineName}`);
             renderMetrics();
 
             if (state.activeView === 'demands') {
-                loadData();
+                render();
             }
 
             setTimeout(() => {
                 setStatus('Connected', 'active');
             }, 3000);
+        } else if (notification.type === 'new-user') {
+            state.users.push(notification.data);
+            state.summary = notification.summary;
+
+            setStatus(`New user: ${notification.data.name}`, 'active');
+            showNotification(`New user created: ${notification.data.name}`);
+            renderMetrics();
+
+            if (state.activeView === 'users') {
+                render();
+            }
+
+            setTimeout(() => {
+                setStatus('Connected', 'active');
+            }, 3000);
+        } else if (notification.type === 'test-message') {
+            setStatus(notification.message, 'active');
+            showNotification(notification.message);
+
+            setTimeout(() => {
+                setStatus('Connected', 'active');
+            }, 5000);
         }
     });
 
@@ -291,6 +332,7 @@ function initWebSocket() {
 
     wsClient.addEventListener('error', () => {
         setStatus('Connection error', 'error');
+        showNotification('WebSocket connection error', 'error');
     });
 }
 
@@ -382,12 +424,63 @@ const createDemand = async (medicineName) => {
     }
 };
 
+const createUser = async (formData) => {
+    setStatus('Saving', 'loading');
+
+    try {
+        if (useApiEndpoints) {
+            const userData = {
+                name: formData.get('name'),
+                role: formData.get('role'),
+                department: formData.get('department'),
+                shift: formData.get('shift'),
+                email: formData.get('email'),
+            };
+
+            const response = await fetch(api.users, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `HTTP ${response.status}`);
+            }
+
+            addUserModal.close();
+            addUserForm.reset();
+
+            state.activeView = 'users';
+            tabs.forEach((tab) => {
+                tab.classList.toggle('tabs__button--active', tab.dataset.view === state.activeView);
+            });
+            addUserButton.style.display = 'block';
+
+            await loadData();
+            setStatus('Connected', 'active');
+        }
+    } catch (error) {
+        setStatus('Error', 'error');
+        addUserModal.close();
+        content.innerHTML = `<p class="empty">Unable to create user. ${error.message}</p>`;
+    }
+};
+
+const closeModal = () => {
+    addUserModal.close();
+    addUserForm.reset();
+};
+
 tabs.forEach((tab) => {
     tab.addEventListener('click', () => {
         state.activeView = tab.dataset.view;
         tabs.forEach((item) => {
             item.classList.toggle('tabs__button--active', item === tab);
         });
+        addUserButton.style.display = state.activeView === 'users' ? 'block' : 'none';
         render();
     });
 });
@@ -399,6 +492,7 @@ searchForm.addEventListener('submit', (event) => {
     tabs.forEach((tab) => {
         tab.classList.toggle('tabs__button--active', tab.dataset.view === state.activeView);
     });
+    addUserButton.style.display = 'none';
     render();
 });
 
@@ -418,6 +512,34 @@ content.addEventListener('click', (event) => {
     }
 });
 
+addUserButton.addEventListener('click', () => {
+    addUserModal.showModal();
+});
+
+addUserForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    createUser(new FormData(addUserForm));
+});
+
+closeModalButtons.forEach((button) => {
+    button.addEventListener('click', closeModal);
+});
+
+addUserModal.addEventListener('click', (event) => {
+    if (event.target === addUserModal) {
+        closeModal();
+    }
+});
+
 refreshButton.addEventListener('click', loadData);
+
+testWebSocketButton.addEventListener('click', async () => {
+    try {
+        await fetch('/api/test');
+    } catch (error) {
+        setStatus('Test failed', 'error');
+        showNotification('WebSocket test failed', 'error');
+    }
+});
 
 loadData();

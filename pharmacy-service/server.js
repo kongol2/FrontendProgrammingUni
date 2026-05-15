@@ -13,6 +13,9 @@ const notificationEmitter = new EventEmitter();
 const ROOT_DIR = __dirname;
 const DATA_FILE = path.join(ROOT_DIR, 'data', 'pharmacy-data.json');
 
+// In-memory storage for new users (to demonstrate WebSocket)
+const memoryUsers = [];
+
 const MIME_TYPES = {
     '.css': 'text/css; charset=utf-8',
     '.html': 'text/html; charset=utf-8',
@@ -96,12 +99,25 @@ const handleApi = async (request, response, pathname) => {
     }
 
     if (request.method === 'GET' && pathname === '/api/users') {
-        sendJson(response, 200, store.users);
+        const allUsers = [...store.users, ...memoryUsers];
+        sendJson(response, 200, allUsers);
         return;
     }
 
     if (request.method === 'GET' && pathname === '/api/demands') {
         sendJson(response, 200, store.demands);
+        return;
+    }
+
+    if (request.method === 'GET' && pathname === '/api/test') {
+        // Broadcast WebSocket test message to all connected clients
+        notificationEmitter.emit('test', {
+            type: 'test-message',
+            message: 'WebSocket is working! Check other browser tabs.',
+            timestamp: new Date().toISOString(),
+        });
+
+        sendJson(response, 200, { message: 'Test message broadcasted to all connected clients' });
         return;
     }
 
@@ -125,17 +141,55 @@ const handleApi = async (request, response, pathname) => {
             createdAt: new Date().toISOString().slice(0, 10),
         };
 
+        store.demands.push(demand);
+        await writeStore(store);
+
         // Broadcast notification to all connected WebSocket clients
         notificationEmitter.emit('demand', {
             type: 'new-demand',
             data: demand,
             summary: buildSummary(store),
         });
-        
-        
-        store.demands.push(demand);
-        await writeStore(store);
+
         sendJson(response, 201, demand);
+        return;
+    }
+
+    if (request.method === 'POST' && pathname === '/api/users') {
+        const body = await collectBody(request);
+        const name = String(body.name || '').trim();
+        const role = String(body.role || '').trim();
+        const department = String(body.department || '').trim();
+        const shift = String(body.shift || '').trim();
+        const email = String(body.email || '').trim();
+
+        if (!name || !role || !department || !shift || !email) {
+            sendJson(response, 400, { message: 'Name, role, department, shift, and email are required.' });
+            return;
+        }
+
+        const allExisting = [...store.users, ...memoryUsers];
+        const user = {
+            id: allExisting.reduce((max, item) => Math.max(max, item.id), 0) + 1,
+            name,
+            role,
+            department,
+            shift,
+            email,
+            completedOrders: 0,
+        };
+
+        // Save to memory (in-memory storage for demo)
+        memoryUsers.push(user);
+
+        // Broadcast notification to all connected WebSocket clients
+        notificationEmitter.emit('user', {
+            type: 'new-user',
+            data: user,
+            summary: buildSummary(store),
+        });
+
+        sendJson(response, 201, user);
         return;
     }
 
@@ -221,6 +275,22 @@ wss.on('connection', (ws) => {
 
 // Emit notifications to all connected WebSocket clients
 notificationEmitter.on('demand', (notification) => {
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(notification));
+        }
+    });
+});
+
+notificationEmitter.on('user', (notification) => {
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(notification));
+        }
+    });
+});
+
+notificationEmitter.on('test', (notification) => {
     wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify(notification));

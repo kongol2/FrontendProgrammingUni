@@ -35,10 +35,12 @@
                 <div class="service-status" id="service-status">Connecting</div>
             </header>
 
+            <div class="notification notification--hidden" id="notification" role="status" aria-live="polite"></div>
+
             <section class="hero">
                 <div class="hero__copy">
-                    <p>Live JSON data from a Node REST API</p>
-                    <h2>Inventory, staff, and demand requests in one SPA.</h2>
+                    <p>Pharmacy care desk</p>
+                    <h2>Medicine stock, staff shifts, and refill requests in one place.</h2>
                 </div>
                 <form class="search" id="search-form">
                     <label class="search__label" for="search-input">Search medicines</label>
@@ -54,10 +56,49 @@
                         <p class="eyebrow" id="active-kicker">Overview</p>
                         <h2 id="active-title">Today at the pharmacy</h2>
                     </div>
-                    <button class="button" type="button" id="refresh-button">Refresh data</button>
+                    <div class="panel__actions">
+                        <button class="button" type="button" id="refresh-button">Refresh data</button>
+                        <button class="button button--info" type="button" id="test-websocket-button">Test WebSocket</button>
+                        <button class="button button--success" type="button" id="add-user-button" style="display: none;">Add User</button>
+                    </div>
                 </div>
                 <div class="content-grid" id="content"></div>
             </section>
+
+            <dialog class="modal" id="add-user-modal">
+                <form class="modal__form" id="add-user-form">
+                    <div class="modal__header">
+                        <h3>Add New User</h3>
+                        <button type="button" class="modal__close" data-close-modal>&times;</button>
+                    </div>
+                    <div class="modal__body">
+                        <div class="form-group">
+                            <label for="user-name">Name *</label>
+                            <input type="text" id="user-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-role">Role *</label>
+                            <input type="text" id="user-role" name="role" placeholder="e.g., Pharmacist" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-department">Department *</label>
+                            <input type="text" id="user-department" name="department" placeholder="e.g., Prescription desk" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-shift">Shift *</label>
+                            <input type="text" id="user-shift" name="shift" placeholder="e.g., 09:00-17:00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-email">Email *</label>
+                            <input type="email" id="user-email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="modal__footer">
+                        <button type="button" class="button" data-close-modal>Cancel</button>
+                        <button type="submit" class="button button--success">Create User</button>
+                    </div>
+                </form>
+            </dialog>
         </main>
     </div>
 </body>

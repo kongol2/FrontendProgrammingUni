@@ -1,14 +1,30 @@
 .notification {
-  padding: 10px;
-  margin-top: 12px;
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1100;
+  width: min(360px, calc(100vw - 32px));
+  padding: 16px 18px;
+  color: #fff;
+  background-color: #007a5a;
+  border-radius: 8px;
+  box-shadow: 0 14px 35px rgba(23, 32, 38, 0.22);
+  font-weight: 700;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 180ms ease, transform 180ms ease;
 }
 
 .notification--error {
-  background-color: $color-danger;
-  color: #fff;
+  background-color: #b4232f;
 }
 
 .notification--success {
-  background-color: $color-success;
-  color: #fff;
+  background-color: #007a5a;
+}
+
+.notification--hidden {
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(12px);
 }
